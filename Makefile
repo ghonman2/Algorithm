@@ -7,8 +7,10 @@ LDLIBS=
 
 OBJS = ${TARGET_OBJS}
 OBJS ?= main.cpp
+SUBDIRS = $(shell find . -maxdepth 1 -type dir)
 
 TARGET=test
+
 
 all : $(TARGET)
 
