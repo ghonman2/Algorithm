@@ -15,12 +15,12 @@ TARGET=test
 all : $(TARGET)
 
 clean :
-	rm -f *.o
+	@rm -f *.o
 
 fclean :
-	make clean
-	rm -f $(TARGET)
-	rm -rf test.dSYM
+	@make clean
+	@rm -f $(TARGET)
+	@rm -rf test.dSYM
 
 $(TARGET) : $(OBJS)
 	$(CC) -o $@ $(OBJS) $(CFLAGS) -std=c++11 -O2
@@ -32,6 +32,6 @@ re :
 dirClean : 
 	@for dir in $(SUBDIRS); do \
         $(MAKE) -C $$dir fclean; \
-    done
+     done
 
 .PHONY: fclean clean re all dirClean
