@@ -13,35 +13,20 @@
  *
  **********************************************************************/
 
-#include <bits/stdc++.h>
+//#include <bits/stdc++.h>
+#include <vector>
+#include <stdio.h>
 
 using namespace std;
 
-#define INIT_COST (1000 * 20 + 1)
-
-typedef pair<int, int>pi;
-
-int c, n;
-vector<pi> infos;
-unordered_map<int, int >dp;
-
-void input()
+int func()
 {
-	cin >> c >> n;
-	infos = vector<pi>(n);
-	for (auto &info : infos){
-		cin >> info.first >> info.second;
-	}
-}
-
-void sol()
-{
-
+	return (10);
 }
 
 int main()
 {
-	input();
-	sol();
+	int &&b = func();
+	printf("%d\n",b);
 	return (0);
 }

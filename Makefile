@@ -23,7 +23,7 @@ fclean :
 	@rm -rf test.dSYM
 
 $(TARGET) : $(OBJS)
-	$(CC) -o $@ $(OBJS) $(CFLAGS) -std=c++11 -O2
+	$(CC) -o $@ $(OBJS) $(CFLAGS) -std=c++17 -O2
 
 re : 
 	make fclean

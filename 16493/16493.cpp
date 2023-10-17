@@ -15,28 +15,34 @@
 
 #include <bits/stdc++.h>
 
+
 using namespace std;
 
-#define INIT_COST (1000 * 20 + 1)
-
-typedef pair<int, int>pi;
-
-int c, n;
-vector<pi> infos;
-unordered_map<int, int >dp;
+typedef pair<int, int> pi;
+int n,m;
+vector<pi> chapters;
+vector<vector<int>>dp;
 
 void input()
 {
-	cin >> c >> n;
-	infos = vector<pi>(n);
-	for (auto &info : infos){
-		cin >> info.first >> info.second;
-	}
+	cin >> n >> m;
+	chapters = vector<pi>(m);
+	for (auto & c : chapters)
+		cin >> c.first >> c.second;
+
+	dp = vector<vector<int>>(m+1, vector<int>(n+1,0));
 }
 
 void sol()
 {
-
+	for (int i = 1; i <= m; i ++){
+		for (int j = 0; j <= n; j ++){
+			if (j >= chapters[i].first)
+				dp[i][j] = max(dp[i-1][j-chapters[i].first] + chapters[i].second, dp[i-1][j]);
+			dp[i][j] = max(dp[i-1][j], dp[i][j]);
+		}
+	}
+	cout << dp[m][n] << endl;
 }
 
 int main()

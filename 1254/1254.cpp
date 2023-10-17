@@ -49,6 +49,22 @@ void sol()
 	cout << name.length() * 2 - 1 << endl;
 }
 
+void sol2()
+{
+	int n = name.length();
+	for (int i = n / 2; i < n; i ++){
+		int check = 0 ;
+		for (int j = 0; j < n - i; j ++){
+				if (name[i + j] != name[i - j]){ check = 1; break;}
+		}
+		if (!check){
+			printf("%d\n",i * 2 + 1);
+			return;
+		}
+	}
+	printf("%d\n", 2 * n + 1);
+}
+
 int main()
 {
 	input();

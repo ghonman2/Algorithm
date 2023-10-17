@@ -17,31 +17,8 @@
 
 using namespace std;
 
-#define INIT_COST (1000 * 20 + 1)
-
-typedef pair<int, int>pi;
-
-int c, n;
-vector<pi> infos;
-unordered_map<int, int >dp;
-
-void input()
-{
-	cin >> c >> n;
-	infos = vector<pi>(n);
-	for (auto &info : infos){
-		cin >> info.first >> info.second;
-	}
-}
-
-void sol()
-{
-
-}
 
 int main()
 {
-	input();
-	sol();
 	return (0);
 }
