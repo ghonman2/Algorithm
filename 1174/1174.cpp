@@ -14,38 +14,53 @@
  **********************************************************************/
 
 #include <bits/stdc++.h>
+#include <iostream>
+
 
 #define MAXITER (2 << 9)
+#define SNUM "9876543210"
 
 using namespace std;
-
-int n
+int n;
+int check = 0;
+string ret;
 
 void input()
 {
 	cin >> n;
 }
 
-vector<int> nums;
-vector<int>v(10, 0);
-int numbers[10] = {9,8,7,6,5,4,3,2,1,0};
 
-
-void dfs(int depth, int piv)
+void dfs(int &depth, int idx)
 {
-
-}
-
-void sol()
-{
-	if (n > MAXITER){
-		cout << -1 << endl;
+	if (depth == n)
+	{
+		check = 1;
+		cout << ret << endl;
 		return ;
 	}
 
+	for (int i = idx; i >=0; i --)
+	{
+		ret += SNUM[i];
+		depth += 1;
+		dfs(depth, i - 1);
+		ret.pop_back();
+	}
+}
+
+
+void sol()
+{
+	int depth = 0;
+	dfs(depth,9);
+	if (!check)
+		printf("-1\n");
 }
 
 int main()
 {
+	input();
+	sol();
 	return (0);
 }
