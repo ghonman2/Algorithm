@@ -1,7 +1,7 @@
 
 
 CC= g++
-CFLAGS= -g3 -Wall -Werror -Wextra
+CXXFLAGS= -g3 -Wall -Werror -Wextra
 LDFLAGS=
 LDLIBS=
 
@@ -23,7 +23,7 @@ fclean :
 	@rm -rf test.dSYM
 
 $(TARGET) : $(OBJS)
-	$(CC) -o $@ $(OBJS) $(CFLAGS) -std=c++17 -O2
+	$(CC) -o $@ $(OBJS) $(CXXFLAGS) -std=c++17 -O2
 
 re : 
 	make fclean

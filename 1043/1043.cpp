@@ -13,78 +13,72 @@
  *
  **********************************************************************/
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+
 using namespace std;
 
-typedef map<int, int> mi;
+typedef vector<int> vi;
 
-int n,m;
-int answer;
-vector<int>truthPeople;
-vector<mi>parties;
+int n,m,k;
+vector<int> truth;
+vector<vi> party;
+vector<int> parent;
 
 void input()
 {
-	cin >> n >> m;
-	parties = vector<mi>(m);
-	int nrTruth = 0;
-	truthPeople = vector<int>(n + 1, 0);
-	cin >> nrTruth;
-	for (int i = 0 ; i < nrTruth; i++){
-		int p;
-		cin >> p;
-		truthPeople[p] = 1;
-	}
-	for (auto &party : parties){
-		cin >> nrTruth;
-		int  p;
-		for (int i = 0 ; i < nrTruth; i ++){
+	cin >> n >> m >> k;
+	parent = vector<int>(n+1,0);
+	truth = vector<int>(k);
+	party = vector<vi>(n+1);
+	for (auto &t: truth)
+		cin >> t;
+	for (int i = 0; i < m; i ++){
+		int nrParty, p;
+		cin >> nrParty;
+		for (int j = 0; j < nrParty; j++){
 			cin >> p;
-			party[p] = 1;
+			party[i].push_back(p);
 		}
 	}
+	for (int i = 1; i < n+1;i++)
+		parent[i] = i;
 }
 
-int canLie(map<int,int> &party)
+inline int find(int a)
 {
-	for (auto &node : party){
-		if (!node.second) continue;
-		if (truthPeople[node.first])
-			return (0);
-	}
-	return (1);
+	return a == parent[a] ? a : find(parent[a]);
 }
 
-void setTruth(map<int, int> &party, int item)
+void unions(int a, int b)
 {
-	for (auto &node :party){
-		truthPeople[node.first] = item;
-	}
-}
-
-void dfs(int idx, int ret)
-{
-	if (idx == m - 1){
-		answer = max(answer, ret);
-		return;
-	}
-	for (int i = idx + 1; i < m; i ++){
-		if (canLie(parties[i]))
-			dfs(idx + 1, ret + 1);
-		setTruth(parties[i], 1);	
-		dfs(idx + 1, ret);
-		setTruth(parties[i], 0);
-	}
+	a = find(a);
+	b = find(b);
+	if (a != b) parent[b] = a;
 }
 
 void sol()
 {
-	dfs(-1, 0);
-	cout << answer << endl;
+	int answer = m;
+
+	for (auto &p: party)
+		for (auto &k: p)
+			unions(p[0],k);
+
+	for (int i = 0; i < m; i++){
+		int isTruth = 0;
+		for (auto &p : party[i]){
+			for (auto &t : truth)
+				if (find(t) == find(p)) {isTruth = 1; break;}
+			if (isTruth) break;
+		}
+		if (isTruth) answer --;
+	}
+	printf("%d\n",answer);
 }
 
-
-int	main(){
+int main()
+{
 	input();
 	sol();
 	return (0);
