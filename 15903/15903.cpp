@@ -13,38 +13,37 @@
  *
  **********************************************************************/
 
+
 #include <bits/stdc++.h>
 
 using namespace std;
 
-string line;
+uint64_t n,m;
+priority_queue<uint64_t,vector<uint64_t>,greater<uint64_t>>q;
 void input()
 {
-	cin >> line;
-}
-
-
-int cntOtherA(int pos, string &line, int len)
-{
-	int cnt = 0;
-	for (int i = 0; i < len ; i++)
-		if (line[(i+pos) % len] == 'b')
-			cnt ++;
-	return (cnt);
+	cin >> n >> m;
+	for (uint64_t i = 0; i < n; i++)
+	{
+		uint64_t tmp;
+		cin >> tmp;
+		q.push(tmp);
+	}
 }
 
 void sol()
 {
-	int lineLen = line.length();
-	int ret = INT_MAX;
-	int aCnt = count(line.begin(),line.end(), 'a');
-
-	for (int i = 0; i < lineLen; i++){
-		ret = min(ret, cntOtherA(i,line, aCnt));
+	uint64_t t = 0;
+	while (t++ < m){
+		uint64_t fnum = q.top(); q.pop();
+		uint64_t snum = q.top(); q.pop();
+		q.push(fnum + snum); q.push(fnum + snum);
 	}
-
-	printf("%d\n",ret);
-
+	uint64_t sum = 0;
+	while (!q.empty()){
+		sum += q.top(); q.pop();
+	}
+	printf("%llu\n",sum);
 }
 
 int main()

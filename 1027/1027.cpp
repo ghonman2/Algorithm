@@ -28,33 +28,27 @@ void input()
 		cin >> n;
 }
 
-inline double getSlope(int x, int y)
+double getScope(int x, int y)
 {
-	return ((1.0) * (numbers[x] - numbers[y]) / ((x-y) * 1.0));
+	return ((numbers[x] - numbers[y])  * (1.0) / (x-y));
 }
 
 void sol()
 {
-	int answer = 0;
-	for (int i = 0 ; i < (int)numbers.size() - 1; i ++)
-	{
-		int  j = i +1;
-		for (; j < (int)numbers.size(); j ++)
-		{
-			double stdSlope = getSlope(i, j);
-			int tmp = 1;
-			for (int idx = i + 1; idx < j ; idx ++)
-			{
-				double slope = getSlope(i, idx);
-				if (slope < stdSlope)
-					tmp += 1;
-				else
-					break;
-			}
-			answer = max(tmp, answer);
+	vector<int>cnt(n,0);
+
+	for (int i = 0; i < n; i ++){
+		double maxScope = -1000000000;
+		for (int j = i +1 ; j < n ; j ++){
+			int h = numbers[j] - numbers[i];
+			int w = j - i;
+			double scope = h * 1.0 / w;
+			if (scope <= maxScope)continue;
+			maxScope = scope;
+			cnt[i] ++; cnt[j]++;
 		}
 	}
-	cout << answer << endl;
+	printf("%d\n",*max_element(cnt.begin(), cnt.end()));
 }
 
 int main()

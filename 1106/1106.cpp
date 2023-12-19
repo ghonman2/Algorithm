@@ -17,7 +17,7 @@
 
 using namespace std;
 
-#define INIT_COST (1000 * 20 + 1)
+#define INIT_COST (100001)
 
 typedef pair<int, int>pi;
 
@@ -36,7 +36,18 @@ void input()
 
 void sol()
 {
+	int dp[INIT_COST];
+	memset(dp,0,sizeof(dp));
 
+	for (int i = 0; i < INIT_COST; i ++){
+		for (auto &cost: infos){
+			if (i >= cost.first) dp[i] = max(dp[i], dp[i-cost.first] + cost.second);
+		}
+		if (dp[i] >= c){
+			printf("%d\n",i);
+			break;
+		}
+	}
 }
 
 int main()

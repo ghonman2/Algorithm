@@ -13,38 +13,51 @@
  *
  **********************************************************************/
 
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 
 using namespace std;
 
-string line;
+vector<int> nums;
+set<int> v;
+int n;
+
 void input()
 {
-	cin >> line;
+	cin >> n;
+	nums = vector<int>(n);
+	for (auto &t : nums)
+		cin >> t;
 }
 
-
-int cntOtherA(int pos, string &line, int len)
+int getSum(vector<int> &ns)
 {
-	int cnt = 0;
-	for (int i = 0; i < len ; i++)
-		if (line[(i+pos) % len] == 'b')
-			cnt ++;
-	return (cnt);
+	int ret = ns[0];
+
+	if (ns.size() <= 2) return (ns.size() < 2 ? ret : ns[0] + ns[1]);
+
+	ret += ns[1];
+	for (int i = 2; i < n; i ++){
+		ret = ret * 2 + ns[i];
+	}
+	return (ret);
 }
 
 void sol()
 {
-	int lineLen = line.length();
-	int ret = INT_MAX;
-	int aCnt = count(line.begin(),line.end(), 'a');
+	priority_queue<int,vector<int>, greater<int>>q;
+	int answer = 0;
 
-	for (int i = 0; i < lineLen; i++){
-		ret = min(ret, cntOtherA(i,line, aCnt));
+	for (auto &n : nums)
+		q.push(n);
+
+	while (q.size() != 1)
+	{
+		int t1 = q.top(); q.pop();
+		int t2 = q.top(); q.pop();
+		answer += (t1 + t2);
+		q.push(t1 + t2);
 	}
-
-	printf("%d\n",ret);
-
+	cout << answer << endl;
 }
 
 int main()
