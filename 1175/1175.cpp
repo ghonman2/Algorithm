@@ -13,49 +13,58 @@
  *
  **********************************************************************/
 
+
 #include <bits/stdc++.h>
-#define FAST ios::sync_with_stdio(false); cin.tie(NULL)
 
 using namespace std;
 
-typedef vector<int> vi;
 typedef pair<int, int>pi;
 
-int n;
-vector<pi> rces;
+int n,m;
+vector<string> board;
+pi start;
+int destCnt = 0;
+int v[50][50][4];
+vector<pi> dests;
+int dir = -1;
+
+const int dx[4] = {0,0,-1,1}, dy[4] = {1,-1,0,0};
+
+
+struct Info{
+	int x;
+	int y;
+	int dir;
+	int cnt;
+};
 
 void input()
 {
-	cin >> n;
-	rces = vector<pi>(n);
-	for (auto &s : rces)
-		cin >> s.first >> s.second;
+	cin >> n >> m;
+	board = vector<string>(n);
+	for (int i= 0 ; i < n ; i ++){
+		string &line = board[i];
+		cin >> line;
+		for (int j = 0; j < m; j++){
+			if (line[j] == 'S'){ start = make_pair(i,j); line[j] = '.';}
+			else if (line[j] == 'C') dests.push_back(make_pair(i,j));
+		}
+	}
 }
+
+int bfs(pi begin, pi dst, int &dir)
+{
+
+}
+
 
 void sol()
 {
-	vector<vector<int>>dp(n,vector<int>(n,INT_MAX));
-	for (int i = 0; i < n ; i++)
-		dp[i][i] = 0;
-
-	for (int x = 0; x < n; x ++){
-		for (int y = x + 1; y < n; y ++){
-			for (int mid = x + 1; mid < y; mid++){
-				dp[x][y] = min(dp[x][y], dp[x][mid] + dp[mid+1][y] + rces[x].first * rces[mid].second *rces[y].second);
-			}
-		}
-	}
-	for (auto &num : dp[n-1])
-		printf("%d ", num);
-	printf("\n");
-
-	printf("%d\n",dp[n-1][n-1]);
 }
 
-int main(){
-	FAST;
+int main()
+{
 	input();
 	sol();
-	return 0;
+	return (0);
 }
-

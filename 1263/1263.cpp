@@ -20,41 +20,40 @@ using namespace std;
 typedef pair<int, int> pi;
 
 int n;
-vector<pi> t;
+vector<pi> schedules;
 
 int cmp(pi &a, pi &b)
 {
-	if (a.second != b.second) return a.second > b.second;
-	return a.first < b.first;
+	return (a.second > b.second);
 }
 
 void input()
 {
 	cin >> n;
-	t = vector<pi>(n);
-	for (int i = 0 ; i < n ; i++)
-		cin >> t[i].first >> t[i].second;
-	sort(t.begin(), t.end(), cmp);
+	schedules = vector<pi>(n);
+	for (auto &s :schedules)
+		cin >> s.first >> s.second;
+	sort(schedules.begin(), schedules.end(), cmp);
 }
+
+// 4
+//3 5
+//8 14
+//5 20
+//1 16
 
 void sol()
 {
-	int endTime = t.front().second ;
-//	for (auto &time : t)
-//		cout << time.second << " | " << time.first << endl;
+	int left = 0;
 
-	for (int i = 0; i < (int)t.size(); i ++){
-		//printf("endTime %d : checkTIme : %d\n",endTime, t[i].second - t[i].first);
-		if (endTime < t[i].second - t[i].first){
-			cout << -1 << endl;
-			return ;
-		}
-		endTime = min(t[i].second - t[i].first, endTime - t[i].first);
+	for (size_t i = 0; i < schedules.size();i ++){
+		auto &s =  schedules[i];
+
 	}
-	cout << min(t.back().second - t.back().first, endTime) << endl;
 }
 
 int main(){
+	ios::sync_with_stdio(false); cin.tie(NULL);
 	input();
 	sol();
 	return (0);

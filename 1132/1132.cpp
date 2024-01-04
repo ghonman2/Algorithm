@@ -20,51 +20,57 @@ using namespace std;
 
 typedef long long ll;
 
+
 int n;
-vector<string> ins;
-map<int, ll> dict;
+vector<string> stringNumbers;
 
 void input()
 {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
 	cin >> n;
-	ins = vector<string>(n);
-	for (auto &in : ins)
-		cin >> in;
-	ll num = 9;
-	for (auto & in: ins){
-		for (char &ch : in){
-			if (dict.find(ch) == dict.end())
-				dict[ch] = num --;
-		}
-	}
+	stringNumbers = vector<string>(n);
+	for (auto &str : stringNumbers)
+		cin >> str;
 }
 
-ll transToBase(string &str, vector<int> &nums)
+inline ll transStrToNum(string &str, vector<ll> &dict)
 {
 	ll ret = 0;
-	if (nums[str[0] - 'A'] == 0)
-		return (-1);
+
+	if (dict[int(str[0] - 'A')] == 0)
+		return (ret);
 	for (auto &ch : str)
-		ret = ret * 10 + nums[ch - 'A'];
+		ret = ret * 10 + dict[(int)(ch - 'A')];
 	return (ret);
 }
 
+
 void sol()
 {
-	ll answer = 0;
+	vector<ll> dict(10,0);
+	for (ll i = 0; i < 10; i ++)
+		dict[i] = i;
+	ll ret = 0;
 
-	for (int i = 0; i < 10 - num; i ++){
-
-	}
-
-	cout << answer << endl;
+	do {
+		ll tmp = 0;
+		int check = 0;
+		for (auto &strNumber : stringNumbers){
+			ll t = transStrToNum(strNumber,dict);
+			if (!t){check = 1; break;}
+			tmp += t; 
+		}
+		if (!check)
+			ret = max(ret, tmp);
+	}while(next_permutation(dict.begin(), dict.end()));
+	printf("%lld\n",ret);
 }
-
 
 int main()
 {
-	//input();
-	myInput();
+	input();
+	//myInput();
 	sol();
 	return (0);
 }
