@@ -1,7 +1,21 @@
+/**********************************************************************
+ * Copyright (c) 2023
+ *  Joowon park <ghonman2@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTIABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ **********************************************************************/
+
+
 #include <bits/stdc++.h>
-#define REP(i,a,b) for ( int i = a ; i < b ; i ++)
 #define FAST cin.tie(NULL);cout.tie(NULL); ios::sync_with_stdio(false)
-#define print(a) cout << a << "\n";
 using namespace std;
 
 typedef long long ll;
@@ -11,98 +25,85 @@ typedef vector<int> vi;
 typedef pair<int,int> pi;
 typedef pair<pi,pi> ppi;
 
-int dx[] = {1,-1};
-int dirs[] = {0,1,2,3}; // 동서남북
-int board[100][100];
-int m = 0,n = 0 ;
-int dstx,dsty,dstdir;
-int frmx,frmy,frmdir;
-int answer = INT_MAX ;
-void init()
+typedef struct 
+{
+	int x;
+	int y;
+	int dir;
+} Robot;
+
+
+int v[100][100][4];
+const int dx[4] = {0,0,1,-1},  dy[4] = {1,-1,0,0};
+
+
+int n,m;
+vector<vi> board;
+Robot frm,dst;
+
+void input()
 {
 	cin >> n >> m;
-	memset(board,0,sizeof(board));
-	REP(i,1,n+1){
-		REP(j,1,m+1){
-			cin >> board[i][j];
-		}
-	}
-	cin >> frmy >> frmx >> frmdir; 
-	cin >> dsty >> dstx >> dstdir;
-	frmdir --;
-	dstdir --;
+	board = vector<vi>(n,vi(m));
 
+	for (auto &line : board)
+		for (auto &num : line)
+			cin >> num;
+	cin >> frm.x >> frm.y >> frm.dir;
+	cin >> dst.x >> dst.y >> dst.dir;
+
+	frm.x -= 1, frm.y -=1 , frm.dir -= 1;
+	dst.x -= 1, dst.y -= 1, dst.dir -= 1;
 }
 
-void dfs()
+
+int bfs()
 {
-	queue<ppi>q;
-	q.push({{frmx,frmy},{frmdir,0}});
-	char visited[n+1][m+1][4];
-	memset(visited,0,sizeof(visited));
+	queue<Robot> q;
+	queue<int> cntQ;
 
-	while(!q.empty()){
-		pi a,b;
-		tie(a,b) = q.front(); q.pop();
-		int x = a.first, y = a.second, dir = b.first, cnt = b.second;
-		if(x == dstx && y == dsty && dir == dstdir){
-			answer = min(answer,cnt);
+
+	q.push(frm);
+	cntQ.push(0);
+
+	v[frm.x][frm.y][frm.dir] = 1;
+
+	while (!q.empty()){
+		Robot now = q.front(); q.pop();
+		int cnt = cntQ.front(); cntQ.pop();
+		if (now.x == dst.x && now.y == dst.y && now.dir == dst.dir) return (cnt);
+
+		for (int i = 0; i < 2; i ++){
+			int ndir = now.dir > 1 ? (0 + i) : (2 + i);
+			if (v[now.x][now.y][ndir]) continue;
+			v[now.x][now.y][ndir] = 1;
+			q.push((Robot){now.x,now.y,ndir});
+			cntQ.push(cnt + 1);
 		}
 
-		cout << x <<" "<< y<< " "<< dir << " "<< cnt << "\n";
-		visited[y][x][dir] = 1;
-
-		REP(i,1,4){
-			int nx = 0;
-			int ny = 0 ;
-			if(dir == 0){
-				nx = i + x;
-				if(nx <= m && !visited[y][nx][dir] && board[y][nx] != 1 )
-					q.push({{nx,y},{dir,cnt+1}});
-				else 
-					break;
-			}
-			else if(dir == 1){
-				nx = x - i;
-				if(nx >= 1 && !visited[y][nx][dir] && board[y][nx] != 1 )
-					q.push({{nx,y},{dir,cnt+1}});
-				else 
-					break;
-			}
-			else if(dir == 2){
-				ny = y + i;
-				if(ny <= n && !visited[ny][x][dir] && board[ny][x] != 1)
-					q.push({{x,ny},{dir,cnt+1}});
-				else 
-					break;
-			}
-			else if(dir == 3){
-				ny = y - i;
-				if(ny >= 1 && !visited[ny][x][dir] && board[ny][x] != 1)
-					q.push({{x,ny},{dir,cnt+1}});
-				else 
-					break;
-					
-			}
-		}
-		if(dir == 0 || dir == 1){
-			if(!visited[x][y][2])
-				q.push({{x,y},{2,cnt+1}});
-			if(!visited[x][y][3])
-				q.push({{x,y},{3,cnt+1}});
-		}else {
-			if(!visited[x][y][0])
-				q.push({{x,y},{0,cnt+1}});
-			if(!visited[x][y][1])
-				q.push({{x,y},{1,cnt+1}});
+		for (int i = 1; i <= 3; i ++){
+			int nx = now.x + dx[now.dir] * i, ny = now.y + dy[now.dir] * i;
+			if (nx < 0 || ny < 0 || nx >= n || ny >= m || board[nx][ny] == 1) break;
+			if (v[nx][ny][now.dir]) continue;
+			v[nx][ny][now.dir] = 1;
+			q.push((Robot){nx,ny,now.dir});
+			cntQ.push(cnt + 1);
 		}
 	}
-}
-int main(){
 
+	return (INT_MAX);
+}
+
+void sol()
+{
+	int tmp = bfs();
+	printf("%d\n",tmp);
+}
+
+
+int main(){
 	FAST;
-	init();
-	dfs();
-	print(answer);
+	input();
+	sol();
 	return 0;
 }
