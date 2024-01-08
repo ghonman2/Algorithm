@@ -1,41 +1,65 @@
+/**********************************************************************
+ * Copyright (c) 2023
+ *  Joowon park <ghonman2@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTIABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ **********************************************************************/
+
+
 #include <bits/stdc++.h>
-#define REP(i,a,b) for ( int i = a ; i < b ; i ++)
-#define FAST cin.tie(NULL);cout.tie(NULL); ios::sync_with_stdio(false)
+#define FAST cin.tie(NULL);ios::sync_with_stdio(false)
 
 using namespace std;
 
 typedef long long ll;
-typedef unsigned long long u64;
-typedef unsigned int u32;
-typedef vector<int> vi;
 
+ll n,m;
+vector<ll> t;
 
-
-int valid(vi enters, ll idx)
+void input()
 {
-	ll ret = 0 ;
-	for (ll i = 0 ; i < enters.size(); i ++){
-		ret += idx / enters[i];
+	cin >> n >> m;
+	t = vector<ll>(n);
+	for (auto &tmp : t)
+		cin >> tmp;
+}
+
+int valid(ll &x)
+{
+	ll p = 0;
+
+	for (auto &time: t){
+		p += x / time;
+		if (p >= m) return (1); 
 	}
-	return ret ;
+	return (p >= m);
+}
+
+void sol()
+{
+	ll l = 0, r = *max_element(t.begin(),t.end()) * m;
+
+	while (l < r){
+		ll mid = (l + r) / 2;
+		if (valid(mid))
+			r = mid;
+		else
+			l = mid + 1;
+	}
+	cout << l << "\n";
 }
 
 int main(){
 	FAST;
-	ll n , m = 0 ;
-	cin >> n >> m;
-	vi enters;
-	for(ll i = 0 ; i < n; i ++){
-		ll ent;
-		cin >> ent;
-		enters.push_back(ent);
-	}
-
-	ll answer = -1;
-	ll b = *max_element(enters.begin(),enters.end())*m;
-	for(; b >= 1 ; b /= 2){
-		while(valid(enters,answer+b) < m) answer+=b;
-	}
-	cout <<( answer + 1) <<"\n";
+	input();
+	sol();
 	return 0;
 }

@@ -17,34 +17,53 @@
 
 using namespace std;
 
-typedef pair<int, string> pis;
 
-bool myCmp (const pis &a, const pis &b){
-	return a.first < b.first;
+typedef struct {
+	char c[4];
+	string line;
+	int time;
+}Cmd;
+
+map<int, string>history;
+
+vector<Cmd>cmds;
+
+void input()
+{
+	int n;
+	cin >> n;
+	cmds = vector<Cmd>(n);
+
+	for (auto &c : cmds)
+		cin >> c.c >> c.line >> c.time;
 }
 
-void inputAndSol()
+void sol()
 {
-	int N, n = 0;
-	int t;
-	string nowStr;
-	vector<pis> history = {pis(0, "")};
-	cin >> N;
-	while (n ++ < N){
-		string cmd, middle;
-		cin >> cmd >> middle >> t;
-		if (cmd[0] == 't')
-			nowStr += middle;
-		else {
+	int now = 0;
+	string nowStr = "";
 
+	for (auto &cmd : cmds){
+		if (cmd.c[0] == 't')
+			nowStr += cmd.line;
+		else {
+			int undoTime = cmd.time - stoi(cmd.line) - 1;
+			auto iter = history.lower_bound(undoTime);
+			
+			if (iter == history.end());
+			else if (undoTime < iter->first) nowStr = "";
+			else if (iter == history.end()) ;
+			else nowStr = iter->second;
 		}
-		history.push_back({t, nowStr});
+		history[cmd.time] = nowStr;
+		now = cmd.time;
 	}
-	cout << history.back().second << endl;
+	cout << nowStr << endl;
 }
 
 int main()
 {
-	inputAndSol();
+	input();
+	sol();
 	return (0);
 }
