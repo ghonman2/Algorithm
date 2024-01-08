@@ -1,70 +1,72 @@
+/**********************************************************************
+ * Copyright (c) 2023
+ *  Joowon park <ghonman2@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTIABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ **********************************************************************/
+
+
 #include <bits/stdc++.h>
-#define REP(i,a,b) for ( int i = a ; i < b ; i ++)
 #define FAST cin.tie(NULL);cout.tie(NULL); ios::sync_with_stdio(false)
-#define print(a) cout << a << "\n";
 using namespace std;
 
 typedef long long ll;
-typedef unsigned long long u64;
-typedef unsigned int u32;
-typedef vector<int> vi;
-typedef vector<ll> vl;
-
-ll n ,s; 
-vl number;
 
 
-void init()
+int n,s;
+vector<int> nums;
+unordered_map<ll, int> cnts;
+ll ans = 0;
+
+void input()
 {
 	cin >> n >> s;
-	REP(i,0,n) 
-	{
-		int num ;
-		cin >> num;
-		number.push_back(num);
-	}
+	nums.assign(n, 0);
 
-	sort(number.begin(),number.end());
+	for (auto &t : nums)
+		cin >> t;
 }
 
-void search(int num,int idx,int dst, map<ll,ll> &sums)
+void leftSum(int idx, ll sum)
 {
+	if (idx == n/2){
+		cnts[sum] ++;
+		return ;
+	}
+	leftSum(idx + 1, sum);
+	leftSum(idx + 1, sum + nums[idx]);
+}
 
-	if(sums.find(num) == sums.end()) sums[num] = 1;
-	else sums[num] += 1;
-
-	if(idx == dst) return;
-
-	for(int i = idx+1; i < dst ; i++)
-		search(num + number[i],i,dst,sums);
+void rightSum(int idx, ll sum)
+{
+	if (idx == n){
+		ans += cnts[s-sum];
+		return ;
+	}
+	rightSum(idx + 1, sum + nums[idx]);
+	rightSum(idx + 1, sum);
 }
 
 void sol()
 {
-	ll answer = 0 ;
-	map<ll,ll>sums;
-	map<ll,ll>other;
+	leftSum(0,0);
+	rightSum(n/2,0);
 
-	for(int i = 0 ; i < n/2; i ++){
-		search(number[i],i,n/2,sums);
-	}
-	for(int i = n/2 + !n %2; i < n ; i ++){
-		search(number[i],i,n,other);
-	}
-	if(sums.find(s) != sums.end()) answer += sums[s];
-	if(other.find(s) != other.end()) answer += other[s];
-	for(auto iter = sums.begin(); iter != sums.end(); iter++){
-		if(other.find(s- iter->first) !=other.end()){
-			answer += (other[s-iter->first])*(iter->second);
-		}
-	}
-
-	cout <<answer << "\n";
+	if (!s) ans -= 1;
+	cout << ans << '\n';
 }
 
 int main(){
 	FAST;
-	init();
+	input();
 	sol();
 	return 0;
 }
