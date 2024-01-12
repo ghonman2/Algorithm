@@ -30,20 +30,24 @@ void input()
 
 void sol()
 {
-	vector<int>dp(n, 0);
-	int lo = 0 ,hi = 0, sum = 0;
-	while (hi< n){
-		if (nums[hi] > 0) sum += nums[hi++];
-		else sum -= nums[lo ++];
-		dp[lo] = max(dp[lo], sum);
+	int answer = nums[0];
+	vector<int> dp[2];
+	dp[0] = vector<int>(n,0); // 원래대로 
+	dp[1] = vector<int>(n,0); // 하나 뺀것 
+	
+	dp[0][0] = nums[0];
+	dp[0][1] = nums[0];
+	for (int i = 1; i < n; i++){
+		dp[0][i] = max(dp[0][i-1] + nums[i], nums[i]);
+		dp[1][i] = max(dp[0][i-1], dp[1][i-1] + nums[i]);
+		answer = max(answer,max(dp[0][i],dp[1][i]));
 	}
-	for (auto &n : dp)
-		cout << n << " ";
-	cout << endl;
+	cout << answer << endl;
 }
 
 int main()
 {
+	ios::sync_with_stdio(false); cin.tie(NULL); 
 	input();
 	sol();
 	return (0);
